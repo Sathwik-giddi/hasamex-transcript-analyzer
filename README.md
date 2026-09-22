@@ -1,9 +1,9 @@
 # European Robotic Surgery: Evidence File
 Hasamex AI Engineer technical case (Round 2 demo).
 
-An extractive, fully cited analysis of 3 expert-call transcripts (France, Germany, UK).
-Every answer pairs a short synthesis with exact verbatim quotes plus timestamps.
-No answer is ever generated without retrieved evidence.
+An extractive, fully cited analysis of expert-call transcripts.
+Upload the calls, and every answer pairs a short synthesis with exact verbatim quotes plus timestamps.
+No answer is ever generated without retrieved evidence. The file opens empty: there is no built-in data.
 
 ## Run it (30 seconds, no dependencies, works offline)
 
@@ -20,20 +20,19 @@ Double-clicking `index.html` works too. No build step, no API keys, no backend.
 Open the Transcripts tab and drop plain `.txt` files (one per call). The parser picks up
 `Expert` / `Role` / `Market` headers, splits turns on timestamp lines (`00:18`), and skips
 interviewer lines so experts are only quoted on their own words. Files without timestamps
-still load (split by paragraph, flagged in the report). Uploading replaces the dataset and
-every tab reruns on it: guide answers show the closest passage per expert, themes become a
-question-by-question side-by-side, and questions plus the quote index search the new text.
-Restore the three sample calls any time.
+still load (split by paragraph, flagged in the report). Uploading builds the dataset and
+every tab runs on it: guide answers show the closest passage per expert, themes answer each
+question side by side, and questions plus the quote index search the new text.
 
 ## What the app does (maps to the 6 case requirements)
 
 | Requirement | Where |
 |---|---|
-| Read the 3 transcripts | `data.js`: 21 timestamped chunks (1 speaker turn each, verbatim) |
-| Answer interview-guide questions per expert | Interview guide tab: 6 questions by 3 experts, each pinned to a chunk ID (`GUIDE_ANSWERS`) |
+| Read the transcripts | Upload tab: `.txt` files parsed into timestamped chunks (1 speaker turn each, verbatim) |
+| Answer interview-guide questions per expert | Interview guide tab: 6 questions by each uploaded expert, closest passage shown with score |
 | Extract exact quotes | Every answer renders the verbatim chunk text; the quote index searches it |
 | Show source timestamp | Every quote carries speaker, market and `[mm:ss]` |
-| Common themes and disagreements | Themes tab: 6 readings with verdict labels, each backed by 3 cited quotes |
+| Common themes and disagreements | Themes tab: each guide question answered side by side from every transcript |
 | Ask questions across transcripts | Question tab: free-text extractive QA over all chunks, optional per-expert filter |
 
 ## Architecture
@@ -47,7 +46,7 @@ transcripts turn into timestamped chunks {id, expert, speaker, mm:ss, text}
 
 ## Key decisions (demo walkthrough)
 
-- **Model choice.** No generative model in the default path. With 21 chunks, deterministic TF-IDF plus stemming plus a small synonym map is accurate, instant, offline and explainable. A language model is an optional layer on top (summary wording only), never the source of facts.
+- **Model choice.** No generative model in the default path. At this scale, deterministic TF-IDF plus stemming plus a small synonym map is accurate, instant, offline and explainable. A language model is an optional layer on top (summary wording only), never the source of facts.
 - **Citations and timestamps.** Chunking preserves `{expert, speaker, mm:ss}` as metadata. The UI never rewords quotes. Citation strings render from the chunk record.
 - **Against invention (4 layers).** 1) extractive-only answers, 2) relevance threshold with an explicit no-evidence reply, 3) guide answers pinned to single chunk IDs, 4) disagreements shown side by side with quotes instead of averaged away.
 - **Scale from 3 to 30+ transcripts.** Same chunk schema. Replace the in-page index with embeddings (bge/e5) plus a vector store (FAISS/pgvector), add timestamp alignment for raw audio, dedupe near-identical turns, cache per-question answers, and add an eval harness: citation precision (share of quotes that are exact substrings) and per-question recall against the guide.
@@ -60,7 +59,7 @@ The UI is a clinical dossier: paper background, serif evidence quotes, mono time
 
 - `index.html`: dossier shell plus 5 sections
 - `styles.css`: dossier theme
-- `data.js`: transcripts (verbatim), guide Q&A map, themes
+- `data.js`: the six interview-guide questions (the brief, not transcript data)
 - `retrieval.js`: tokenizer, stemmer, TF-IDF plus cosine, synonym expansion
 - `app.js`: rendering plus tab logic
 

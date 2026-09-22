@@ -1,5 +1,5 @@
 /* Grounded extractive retrieval (no generation, no hallucination).
- * Method: tokenize -> TF-IDF over the 21 timestamped chunks -> cosine similarity.
+ * Method: tokenize -> TF-IDF over the uploaded timestamped chunks -> cosine similarity.
  * Answers are always verbatim chunk quotes with [timestamp + expert] citations.
  * If the best score is below THRESHOLD we return "no evidence" instead of guessing.
  */
@@ -48,13 +48,13 @@ function cosine(a, b) {
 let _idx = null;
 function resetIndex() { _idx = null; }
 
-/* Active dataset: uploaded transcripts when present (see app.js),
- * otherwise the built-in sample set. Guarded so load order never matters. */
+/* Active dataset: uploaded transcripts only (see app.js). The file opens
+ * empty; nothing is built in. Guarded so load order never matters. */
 function DB() {
-  if (typeof liveChunks !== "undefined" && liveChunks && liveChunks.length) {
-    return { chunks: liveChunks, experts: liveExperts };
+  if (typeof liveChunks !== "undefined" && liveChunks) {
+    return { chunks: liveChunks, experts: liveExperts || [] };
   }
-  return { chunks: CHUNKS, experts: EXPERTS };
+  return { chunks: [], experts: [] };
 }
 function getIndex() {
   if (!_idx) _idx = buildIndex(DB().chunks);

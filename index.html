@@ -10,7 +10,7 @@
 <header class="masthead">
   <div class="fileno"><span>File: EU-RS-2026 / expert calls</span><span>Hasamex, AI Engineer case</span></div>
   <h1>European robotic surgery: what the experts said, with receipts</h1>
-  <p class="standfirst">Upload call transcripts, or start from the three sample calls. Each answer carries the exact quote and timestamp it came from. Where the evidence runs out, the file says so.</p>
+  <p class="standfirst">Upload the call transcripts to open the file. Each answer carries the exact quote and timestamp it came from. Where the evidence runs out, the file says so.</p>
   <p class="standfirst small" id="docstats"></p>
   <hr class="docrule" />
 </header>
@@ -34,7 +34,6 @@
         <span class="muted">Plain .txt, one file per call. Same shape as the case-pack samples.</span>
         <input type="file" id="file-input" accept=".txt,.md,text/plain" multiple hidden />
       </label>
-      <p><button class="ghost" id="restore-btn" hidden>Restore the three sample calls</button></p>
       <div id="upload-report"></div>
     </div>
     <div id="file-list"></div>
@@ -102,7 +101,7 @@
     <p class="secsub">The architecture in six lines, for the demo walkthrough.</p>
     <div class="card">
       <dl>
-        <div class="defrow"><dt>Uploads</dt><dd>Transcript files are parsed in the page: header lines set the expert, timestamp lines split the turns, interviewer lines are skipped. The result replaces the dataset and every section reruns on it.</dd></div>
+        <div class="defrow"><dt>Uploads</dt><dd>Transcript files are parsed in the page: header lines set the expert, timestamp lines split the turns, interviewer lines are skipped. The result builds the dataset and every section runs on it.</dd></div>
         <div class="defrow"><dt>Pipeline</dt><dd><code>transcripts</code> become timestamped chunks (one speaker turn each), indexed as TF-IDF in this page. A question retrieves the closest turns by cosine similarity, and the answer is those turns, quoted exactly.</dd></div>
         <div class="defrow"><dt>Model choice</dt><dd>No generative model in the default path. At this scale, deterministic retrieval is more accurate, instant, offline and explainable. A language model may reword summaries later, but never supplies facts.</dd></div>
         <div class="defrow"><dt>Citations</dt><dd>Each chunk keeps its expert, speaker and timestamp. Quotes render from the chunk record, never retyped, so every claim sits next to its source.</dd></div>
@@ -114,7 +113,7 @@
 </main>
 
 <footer class="docfoot">
-  Sources: the three sample transcripts and interview guide in the case pack, or your own uploads. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
+  Sources: your uploaded transcripts, plus the six-question interview guide from the case pack. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
 </footer>
 <script src="data.js"></script>
 <script src="retrieval.js"></script>

@@ -1,4 +1,4 @@
-/* Hasamex case — source data.
+/* Hasamex case: source data.
  * Every quote below is copied verbatim from the 3 sample transcripts.
  * Chunks are split by timestamped speaker turn (the natural unit for citation).
  */
@@ -50,32 +50,32 @@ const GUIDE_QUESTIONS = [
 const GUIDE_ANSWERS = {
   q1: {
     france: { answer: "Growing but concentrated in larger academic hospitals and well-funded private centres; smaller regional hospitals lag.", chunkId: "fr-1" },
-    germany: { answer: "Growing but uneven — large university hospitals are advanced, many smaller hospitals still waiting.", chunkId: "de-1" },
+    germany: { answer: "Growing but uneven: large university hospitals are advanced, many smaller hospitals still waiting.", chunkId: "de-1" },
     uk: { answer: "Increasing; becoming standard for selected procedures in some larger NHS trusts, but access varies by hospital.", chunkId: "uk-1" },
   },
   q2: {
-    france: { answer: "Capital budget approval is the biggest barrier — committees demand a strong economic case.", chunkId: "fr-2" },
+    france: { answer: "Capital budget approval is the biggest barrier: committees demand a strong economic case.", chunkId: "fr-2" },
     germany: { answer: "Cost first (large capital outlay, pressured finances), plus proving the system will be used enough.", chunkId: "de-2" },
-    uk: { answer: "Funding matters, but training capacity is equally important — without trained surgeons and theatre staff, adoption stalls.", chunkId: "uk-2" },
+    uk: { answer: "Funding matters, but training capacity is equally important. Without trained surgeons and theatre staff, adoption stalls.", chunkId: "uk-2" },
   },
   q3: {
-    france: { answer: "Very important — finance wants utilisation, procedure volume, maintenance cost and proof the system pays for itself.", chunkId: "fr-3" },
-    germany: { answer: "Decisive — procurement weighs total cost of ownership, volume, maintenance and service; the economic case decides approval.", chunkId: "de-3" },
-    uk: { answer: "Matters, but not purely financial — patient outcomes, length of stay, recruitment and clinical positioning also count.", chunkId: "uk-3" },
+    france: { answer: "Very important: finance wants utilisation, procedure volume, maintenance cost and proof the system pays for itself.", chunkId: "fr-3" },
+    germany: { answer: "Decisive: procurement weighs total cost of ownership, volume, maintenance and service; the economic case decides approval.", chunkId: "de-3" },
+    uk: { answer: "Matters, but not purely financial: patient outcomes, length of stay, recruitment and clinical positioning also count.", chunkId: "uk-3" },
   },
   q4: {
-    france: { answer: "Training matters for utilisation (several surgeons needed); outcomes are necessary but not sufficient — economics decides ties.", chunkId: "fr-4", extraChunkId: "fr-5" },
-    germany: { answer: "Training is very important operationally — single-surgeon use means poor utilisation and a weak business case.", chunkId: "de-4" },
+    france: { answer: "Training matters for utilisation (several surgeons needed); outcomes are necessary but not sufficient; economics decides ties.", chunkId: "fr-4", extraChunkId: "fr-5" },
+    germany: { answer: "Training is very important operationally: single-surgeon use means poor utilisation and a weak business case.", chunkId: "de-4" },
     uk: { answer: "Economics and clinical strategy are balanced; finance alone does not decide the purchase.", chunkId: "uk-4" },
   },
   q5: {
-    france: { answer: "Steady rather than explosive growth — maybe 15–20% more procedures annually in stronger centres; smaller hospitals slower.", chunkId: "fr-6" },
-    germany: { answer: "Gradual growth — high single digits or low double digits, not ~20% market-wide; competing capital priorities constrain.", chunkId: "de-6", extraChunkId: "de-5" },
-    uk: { answer: "Quite positive — adoption could accelerate with expanded training and cost-competitive systems; above 15% in some areas.", chunkId: "uk-5" },
+    france: { answer: "Steady rather than explosive growth, maybe 15–20% more procedures annually in stronger centres; smaller hospitals slower.", chunkId: "fr-6" },
+    germany: { answer: "Gradual growth: high single digits or low double digits, not ~20% market-wide; competing capital priorities constrain.", chunkId: "de-6", extraChunkId: "de-5" },
+    uk: { answer: "Quite positive. Adoption could accelerate with expanded training and cost-competitive systems; above 15% in some areas.", chunkId: "uk-5" },
   },
   q6: {
     france: { answer: "Six to twelve months once serious; longer if pushed into the next budget cycle.", chunkId: "fr-7" },
-    germany: { answer: "Nine to eighteen months is common — procurement, clinical, finance and management must all align.", chunkId: "de-7" },
+    germany: { answer: "Nine to eighteen months is common: procurement, clinical, finance and management must all align.", chunkId: "de-7" },
     uk: { answer: "Six to nine months if funding is available; much longer if waiting for a new capital cycle.", chunkId: "uk-6" },
   },
 };
@@ -88,7 +88,7 @@ const THEMES = [
     chunkIds: ["fr-1", "de-1", "uk-1"],
   },
   {
-    title: "Economics decides — except the UK balances it",
+    title: "Economics decides, except the UK balances it",
     verdict: "Partial disagreement",
     summary: "France and Germany say the economic case is decisive for approval. The UK expert explicitly disagrees that finance alone decides, weighting clinical strategy equally.",
     chunkIds: ["fr-3", "de-3", "uk-4"],

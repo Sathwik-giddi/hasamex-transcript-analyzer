@@ -3,97 +3,104 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hasamex Case — European Robotic Surgery Transcript Analyzer</title>
+<title>Robotic Surgery Calls: Evidence File (Hasamex Case)</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<header>
-  <div class="kicker">Hasamex · AI Engineer case · Round 2 demo</div>
-  <h1>European Robotic Surgery — Expert Call Analyzer</h1>
-  <p>Extractive, fully-cited analysis of 3 expert calls (France · Germany · UK). Every answer shows an <b>exact quote</b> plus its <b>timestamp</b>. No generation without evidence — if nothing matches, the app says so.</p>
-  <div class="badges">
-    <span class="badge"><b>21</b> timestamped chunks</span>
-    <span class="badge"><b>6</b> interview-guide questions</span>
-    <span class="badge">TF-IDF retrieval in-browser</span>
-    <span class="badge">Zero dependencies · runs offline</span>
-  </div>
-  <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="guide">Interview Guide</button>
-    <button class="tab" data-tab="themes">Themes &amp; Disagreements</button>
-    <button class="tab" data-tab="ask">Ask Across Transcripts</button>
-    <button class="tab" data-tab="quotes">Quote Explorer</button>
-    <button class="tab" data-tab="arch">Architecture</button>
-  </div>
+<header class="masthead">
+  <div class="fileno"><span>File: EU-RS-2026 / 3 expert calls</span><span>Hasamex, AI Engineer case</span></div>
+  <h1>European robotic surgery: what three experts said, with receipts</h1>
+  <p class="standfirst">France, Germany and the UK, interviewed against the same six-question guide. Each answer below carries the exact quote and timestamp it came from. Where the evidence runs out, the file says so.</p>
+  <p class="standfirst small">21 timestamped turns. 6 guide questions. Retrieval runs in this page, offline, with no dependencies.</p>
+  <hr class="docrule" />
 </header>
+
+<nav class="indextabs" role="tablist" aria-label="Sections of the evidence file">
+  <button class="tab active" role="tab" aria-selected="true" data-tab="guide" id="tabbtn-guide">Interview guide</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="themes" id="tabbtn-themes">Themes and disagreements</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="ask" id="tabbtn-ask">Question the file</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="quotes" id="tabbtn-quotes">Quote index</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="arch" id="tabbtn-arch">How it works</button>
+</nav>
+
 <main>
-  <section id="tab-guide">
+  <section id="tab-guide" role="tabpanel" aria-labelledby="tabbtn-guide">
+    <h2 class="sec">Guide answers, expert by expert</h2>
+    <p class="secsub">Choose a guide question. Each exhibit holds that expert's answer plus the verbatim passage behind it.</p>
     <div class="card">
-      <h3>Interview-guide answers, per expert</h3>
-      <div class="muted">Pick a question — each expert's answer appears with its verbatim supporting quote and timestamp.</div>
-      <p><select id="qselect"></select></p>
-      <div class="muted" id="qtext"></div>
+      <label class="field" for="qselect">Guide question</label>
+      <select id="qselect"></select>
+      <p class="hint" id="qtext"></p>
     </div>
     <div class="row" id="guide-cards"></div>
   </section>
 
-  <section id="tab-themes" hidden>
-    <div class="card">
-      <h3>Common themes &amp; disagreements</h3>
-      <div class="muted">Derived only from cited quotes below. Verdicts: <span class="pill agree">Agreement</span> <span class="pill mid">Partial / broadly aligned</span> <span class="pill dis">Disagreement</span></div>
-    </div>
+  <section id="tab-themes" role="tabpanel" aria-labelledby="tabbtn-themes" hidden>
+    <h2 class="sec">Where they agree, and where they split</h2>
+    <p class="secsub">Six readings drawn only from the quoted passages underneath. Verdict labels are text, not color alone.</p>
     <div id="theme-list"></div>
   </section>
 
-  <section id="tab-ask" hidden>
+  <section id="tab-ask" role="tabpanel" aria-labelledby="tabbtn-ask" hidden>
+    <h2 class="sec">Question the file</h2>
+    <p class="secsub">Free text across all three transcripts. Answers are retrieved turns, quoted word for word. Scores below 0.06 read as no evidence, and the file refuses to guess.</p>
     <div class="card">
-      <h3>Ask a question across all transcripts</h3>
-      <div class="muted">Extractive QA: the app retrieves the most relevant timestamped turns and answers <b>only</b> with exact quotes. A relevance threshold guards against hallucination.</div>
-      <p style="display:flex;gap:8px;flex-wrap:wrap">
-        <select id="expert-filter" style="max-width:220px">
-          <option value="all">All experts</option>
-          <option value="france">France — Dr. Martin</option>
-          <option value="germany">Germany — Anna Keller</option>
-          <option value="uk">UK — Dr. Carter</option>
-        </select>
-      </p>
-      <p style="display:flex;gap:8px">
+      <label class="field" for="expert-filter">Limit to</label>
+      <select id="expert-filter">
+        <option value="all">All three experts</option>
+        <option value="france">Exhibit A: France, Dr. Martin</option>
+        <option value="germany">Exhibit B: Germany, Anna Keller</option>
+        <option value="uk">Exhibit C: UK, Dr. Carter</option>
+      </select>
+      <label class="field" for="q">Your question</label>
+      <div class="askrow">
         <input type="text" id="q" placeholder="e.g. What did experts say about ROI and budgets?" />
-        <button class="primary" id="ask-btn">Ask</button>
-      </p>
-      <div class="examples">
-        <button data-ex="What are the main barriers to adoption?">Barriers?</button>
-        <button data-ex="How important is surgeon training?">Training?</button>
-        <button data-ex="What growth is expected over the next 3-5 years?">Growth outlook?</button>
-        <button data-ex="How long does the purchase decision take?">Timelines?</button>
-        <button data-ex="Does finance alone decide the purchase?">Finance vs clinical?</button>
+        <button class="primary" id="ask-btn">Find passages</button>
       </div>
-      <div class="kbd-note">Enter ↵ also works · threshold: score &lt; 0.06 → “no evidence in transcripts”.</div>
+      <div class="examples">
+        <button data-ex="What are the main barriers to adoption?">Barriers</button>
+        <button data-ex="How important is surgeon training?">Training</button>
+        <button data-ex="What growth is expected over the next 3-5 years?">Growth outlook</button>
+        <button data-ex="How long does the purchase decision take?">Timelines</button>
+        <button data-ex="Does finance alone decide the purchase?">Finance vs clinical</button>
+      </div>
+      <p class="hint">Enter works too.</p>
     </div>
-    <div id="ask-out"></div>
+    <div id="ask-out">
+      <div class="empty"><strong>Nothing asked yet.</strong> Type a question above, or start from an example. Cited passages will appear here.</div>
+    </div>
   </section>
 
-  <section id="tab-quotes" hidden>
+  <section id="tab-quotes" role="tabpanel" aria-labelledby="tabbtn-quotes" hidden>
+    <h2 class="sec">Quote index</h2>
+    <p class="secsub">Search the exact transcript language. Every hit is verbatim, with speaker and timestamp.</p>
     <div class="card">
-      <h3>Quote explorer</h3>
-      <div class="muted">Search exact transcript language. Results are verbatim with speaker + timestamp.</div>
-      <p style="display:flex;gap:8px"><input type="text" id="qs" placeholder="e.g. utilisation, capital cycle, theatre staff…" /><button class="ghost" id="qs-btn">Search</button></p>
+      <label class="field" for="qs">Search words</label>
+      <div class="askrow">
+        <input type="text" id="qs" placeholder="e.g. utilisation, capital cycle, theatre staff" />
+        <button class="ghost" id="qs-btn">Search</button>
+      </div>
     </div>
     <div id="qs-out"></div>
   </section>
 
-  <section id="tab-arch" hidden>
+  <section id="tab-arch" role="tabpanel" aria-labelledby="tabbtn-arch" hidden>
+    <h2 class="sec">How it works</h2>
+    <p class="secsub">The architecture in five lines, for the demo walkthrough.</p>
     <div class="card">
-      <h3>Architecture &amp; key decisions (for the demo walkthrough)</h3>
-      <p><b>Pipeline:</b> <code>transcripts → timestamped chunks (1 turn = 1 chunk, 21 total) → TF-IDF index → cosine retrieval → extractive answer + citation</code></p>
-      <p><b>Model choice:</b> no generative model in the default path — deterministic TF-IDF + synonym expansion runs fully offline in the browser. An LLM is an <i>optional</i> summarizer layered on top, and only ever receives retrieved chunks with an instruction to quote verbatim (see README).</p>
-      <p><b>Citations / timestamps:</b> chunking preserves <code>{expert, speaker, mm:ss}</code> metadata; the UI renders every claim as <i>answer + exact quote + [Name · mm:ss]</i>. Quote strings are never reworded.</p>
-      <p><b>Anti-hallucination:</b> (1) extractive-only answers, (2) relevance threshold with explicit “no evidence” fallback, (3) curated guide answers pinned to single chunk IDs, (4) disagreement section shows all sides with quotes instead of averaging them away.</p>
-      <p><b>Scale 3 → 30+ transcripts:</b> same chunk schema; replace in-browser TF-IDF with embeddings (e.g. bge / e5) + a vector store (FAISS / pgvector), add speaker diarization + timestamp alignment for audio, dedupe near-identical turns, cache per-question answers, and add an eval harness (citation precision: % of quotes that are exact substrings; answer recall per guide question).</p>
+      <dl>
+        <div class="defrow"><dt>Pipeline</dt><dd><code>transcripts</code> become 21 timestamped chunks (one speaker turn each), indexed as TF-IDF in this page. A question retrieves the closest turns by cosine similarity, and the answer is those turns, quoted exactly.</dd></div>
+        <div class="defrow"><dt>Model choice</dt><dd>No generative model in the default path. At 21 chunks, deterministic retrieval is more accurate, instant, offline and explainable. A language model may reword summaries later, but never supplies facts.</dd></div>
+        <div class="defrow"><dt>Citations</dt><dd>Each chunk keeps its expert, speaker and timestamp. Quotes render from the chunk record, never retyped, so every claim sits next to its source.</dd></div>
+        <div class="defrow"><dt>Against invention</dt><dd>Four habits: answers quote instead of generate, low scores get an explicit no-evidence reply, guide answers are pinned to single chunks, and disagreements stay side by side instead of being averaged away.</dd></div>
+        <div class="defrow"><dt>From 3 to 30 calls</dt><dd>Same chunk schema. Trade the in-page index for embeddings plus a vector store, add timestamp alignment for raw audio, deduplicate near-identical turns, cache per-question answers, and score citation precision (share of quotes that are exact substrings) with per-question recall.</dd></div>
+      </dl>
     </div>
   </section>
 </main>
-<footer>
-  Source: 3 sample transcripts + interview guide in the case pack · Quotes are verbatim · Built for the Hasamex AI Engineer technical case.
+
+<footer class="docfoot">
+  Sources: the three sample transcripts and interview guide in the case pack. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
 </footer>
 <script src="data.js"></script>
 <script src="retrieval.js"></script>

@@ -46,8 +46,18 @@ function cosine(a, b) {
 }
 
 let _idx = null;
+function resetIndex() { _idx = null; }
+
+/* Active dataset: uploaded transcripts when present (see app.js),
+ * otherwise the built-in sample set. Guarded so load order never matters. */
+function DB() {
+  if (typeof liveChunks !== "undefined" && liveChunks && liveChunks.length) {
+    return { chunks: liveChunks, experts: liveExperts };
+  }
+  return { chunks: CHUNKS, experts: EXPERTS };
+}
 function getIndex() {
-  if (!_idx) _idx = buildIndex(CHUNKS);
+  if (!_idx) _idx = buildIndex(DB().chunks);
   return _idx;
 }
 
@@ -100,8 +110,9 @@ const NO_EVIDENCE_THRESHOLD = 0.06;
 
 function search(query, topK = 3, expertFilter = "all") {
   const { idf, vecs } = getIndex();
+  const chunks = DB().chunks;
   const qv = queryVec(expandQuery(query), idf);
-  const scored = CHUNKS
+  const scored = chunks
     .map((c, i) => ({ chunk: c, score: cosine(qv, vecs[i]) }))
     .filter(r => expertFilter === "all" || r.chunk.expert === expertFilter)
     .sort((a, b) => b.score - a.score)
@@ -109,6 +120,6 @@ function search(query, topK = 3, expertFilter = "all") {
   return scored;
 }
 
-function expertOf(id) { return EXPERTS.find(e => e.id === id); }
-function chunkById(id) { return CHUNKS.find(c => c.id === id); }
+function expertOf(id) { return DB().experts.find(e => e.id === id); }
+function chunkById(id) { return DB().chunks.find(c => c.id === id); }
 function cite(c) { return `${expertOf(c.expert).name} [${c.ts}]`; }

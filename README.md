@@ -15,6 +15,16 @@ python3 -m http.server 8000
 
 Double-clicking `index.html` works too. No build step, no API keys, no backend.
 
+## Uploading transcripts
+
+Open the Transcripts tab and drop plain `.txt` files (one per call). The parser picks up
+`Expert` / `Role` / `Market` headers, splits turns on timestamp lines (`00:18`), and skips
+interviewer lines so experts are only quoted on their own words. Files without timestamps
+still load (split by paragraph, flagged in the report). Uploading replaces the dataset and
+every tab reruns on it: guide answers show the closest passage per expert, themes become a
+question-by-question side-by-side, and questions plus the quote index search the new text.
+Restore the three sample calls any time.
+
 ## What the app does (maps to the 6 case requirements)
 
 | Requirement | Where |
@@ -56,6 +66,7 @@ The UI is a clinical dossier: paper background, serif evidence quotes, mono time
 
 ## 2-minute demo script
 
-1. **Guide tab.** Open Q3 (budgets and ROI). France and Germany say economics decides, the UK balances it. Point at the three timestamps.
-2. **Themes tab.** Open the growth-pace reading: the one real disagreement, with all three numbers quoted (15 to 20 percent, single digits, above 15 percent).
-3. **Question tab.** Ask "Does finance alone decide the purchase?" The UK passage leads. Then type gibberish. The file refuses to guess, which is the anti-hallucination proof.
+1. **Upload moment.** Transcripts tab: drop the three `.txt` files. The report reads "Converted 3 files into 21 quoted passages." Click through to the guide.
+2. **Guide tab.** Open Q3 (budgets and ROI). France and Germany say economics decides, the UK balances it. Point at the three timestamps.
+3. **Themes tab.** Open the growth-pace reading: the one real disagreement, with all three numbers quoted (15 to 20 percent, single digits, above 15 percent).
+4. **Question tab.** Ask "Does finance alone decide the purchase?" The UK passage leads. Then type gibberish. The file refuses to guess, which is the anti-hallucination proof.

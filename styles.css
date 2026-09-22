@@ -153,6 +153,22 @@ code { font-family: var(--mono); font-size: .86em; background: #efe8d6; padding:
 .defrow dt { font-weight: 700; font-size: 14px; }
 .defrow dd { margin: 0; font-size: 14.5px; }
 
+/* Dropzone: dashed target reads as "put files here"; solid accent rim on
+ * dragover confirms the drop will land. Text-only, no icon needed. */
+.dropzone {
+  display: block; border: 2px dashed var(--muted); border-radius: 10px;
+  padding: 26px 20px; text-align: center; cursor: pointer; background: var(--paper);
+}
+.dropzone strong { display: block; font-size: 16px; margin-bottom: 4px; }
+.dropzone:hover { border-color: var(--accent); }
+.dropzone.dragover { border-color: var(--accent); border-style: solid; background: var(--surface); }
+.filerow {
+  border-top: 1px solid var(--line); padding: 10px 2px; font-size: 14px;
+}
+.filerow:first-child { border-top: 0; }
+/* Auto comparison: as many expert columns as fit, wrapping by content width. */
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 10px; }
+
 /* Narrow viewport: distinct mobile state, not squeezed desktop. */
 @media (max-width: 900px) {
   .row { grid-template-columns: 1fr; }

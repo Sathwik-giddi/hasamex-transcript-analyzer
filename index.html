@@ -8,15 +8,16 @@
 </head>
 <body>
 <header class="masthead">
-  <div class="fileno"><span>File: EU-RS-2026 / 3 expert calls</span><span>Hasamex, AI Engineer case</span></div>
-  <h1>European robotic surgery: what three experts said, with receipts</h1>
-  <p class="standfirst">France, Germany and the UK, interviewed against the same six-question guide. Each answer below carries the exact quote and timestamp it came from. Where the evidence runs out, the file says so.</p>
-  <p class="standfirst small">21 timestamped turns. 6 guide questions. Retrieval runs in this page, offline, with no dependencies.</p>
+  <div class="fileno"><span>File: EU-RS-2026 / expert calls</span><span>Hasamex, AI Engineer case</span></div>
+  <h1>European robotic surgery: what the experts said, with receipts</h1>
+  <p class="standfirst">Upload call transcripts, or start from the three sample calls. Each answer carries the exact quote and timestamp it came from. Where the evidence runs out, the file says so.</p>
+  <p class="standfirst small" id="docstats"></p>
   <hr class="docrule" />
 </header>
 
 <nav class="indextabs" role="tablist" aria-label="Sections of the evidence file">
-  <button class="tab active" role="tab" aria-selected="true" data-tab="guide" id="tabbtn-guide">Interview guide</button>
+  <button class="tab active" role="tab" aria-selected="true" data-tab="files" id="tabbtn-files">Transcripts</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="guide" id="tabbtn-guide">Interview guide</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="themes" id="tabbtn-themes">Themes and disagreements</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="ask" id="tabbtn-ask">Question the file</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="quotes" id="tabbtn-quotes">Quote index</button>
@@ -24,7 +25,22 @@
 </nav>
 
 <main>
-  <section id="tab-guide" role="tabpanel" aria-labelledby="tabbtn-guide">
+  <section id="tab-files" role="tabpanel" aria-labelledby="tabbtn-files">
+    <h2 class="sec">Transcripts in the file</h2>
+    <p class="secsub">Drop plain .txt transcripts. Timestamp lines (00:18), speaker names and the Expert, Role, Market header are picked up on their own. Interviewer turns are skipped so experts are only ever quoted on their own words.</p>
+    <div class="card">
+      <label class="dropzone" id="dropzone">
+        <strong>Drop transcript files here, or click to choose</strong>
+        <span class="muted">Plain .txt, one file per call. Same shape as the case-pack samples.</span>
+        <input type="file" id="file-input" accept=".txt,.md,text/plain" multiple hidden />
+      </label>
+      <p><button class="ghost" id="restore-btn" hidden>Restore the three sample calls</button></p>
+      <div id="upload-report"></div>
+    </div>
+    <div id="file-list"></div>
+  </section>
+
+  <section id="tab-guide" role="tabpanel" aria-labelledby="tabbtn-guide" hidden>
     <h2 class="sec">Guide answers, expert by expert</h2>
     <p class="secsub">Choose a guide question. Each exhibit holds that expert's answer plus the verbatim passage behind it.</p>
     <div class="card">
@@ -37,20 +53,17 @@
 
   <section id="tab-themes" role="tabpanel" aria-labelledby="tabbtn-themes" hidden>
     <h2 class="sec">Where they agree, and where they split</h2>
-    <p class="secsub">Six readings drawn only from the quoted passages underneath. Verdict labels are text, not color alone.</p>
+    <p class="secsub">Readings drawn only from the quoted passages underneath. Verdict labels are text, not color alone.</p>
     <div id="theme-list"></div>
   </section>
 
   <section id="tab-ask" role="tabpanel" aria-labelledby="tabbtn-ask" hidden>
     <h2 class="sec">Question the file</h2>
-    <p class="secsub">Free text across all three transcripts. Answers are retrieved turns, quoted word for word. Scores below 0.06 read as no evidence, and the file refuses to guess.</p>
+    <p class="secsub">Free text across all transcripts in the file. Answers are retrieved turns, quoted word for word. Scores below 0.06 read as no evidence, and the file refuses to guess.</p>
     <div class="card">
       <label class="field" for="expert-filter">Limit to</label>
       <select id="expert-filter">
-        <option value="all">All three experts</option>
-        <option value="france">Exhibit A: France, Dr. Martin</option>
-        <option value="germany">Exhibit B: Germany, Anna Keller</option>
-        <option value="uk">Exhibit C: UK, Dr. Carter</option>
+        <option value="all">All experts in the file</option>
       </select>
       <label class="field" for="q">Your question</label>
       <div class="askrow">
@@ -86,11 +99,12 @@
 
   <section id="tab-arch" role="tabpanel" aria-labelledby="tabbtn-arch" hidden>
     <h2 class="sec">How it works</h2>
-    <p class="secsub">The architecture in five lines, for the demo walkthrough.</p>
+    <p class="secsub">The architecture in six lines, for the demo walkthrough.</p>
     <div class="card">
       <dl>
-        <div class="defrow"><dt>Pipeline</dt><dd><code>transcripts</code> become 21 timestamped chunks (one speaker turn each), indexed as TF-IDF in this page. A question retrieves the closest turns by cosine similarity, and the answer is those turns, quoted exactly.</dd></div>
-        <div class="defrow"><dt>Model choice</dt><dd>No generative model in the default path. At 21 chunks, deterministic retrieval is more accurate, instant, offline and explainable. A language model may reword summaries later, but never supplies facts.</dd></div>
+        <div class="defrow"><dt>Uploads</dt><dd>Transcript files are parsed in the page: header lines set the expert, timestamp lines split the turns, interviewer lines are skipped. The result replaces the dataset and every section reruns on it.</dd></div>
+        <div class="defrow"><dt>Pipeline</dt><dd><code>transcripts</code> become timestamped chunks (one speaker turn each), indexed as TF-IDF in this page. A question retrieves the closest turns by cosine similarity, and the answer is those turns, quoted exactly.</dd></div>
+        <div class="defrow"><dt>Model choice</dt><dd>No generative model in the default path. At this scale, deterministic retrieval is more accurate, instant, offline and explainable. A language model may reword summaries later, but never supplies facts.</dd></div>
         <div class="defrow"><dt>Citations</dt><dd>Each chunk keeps its expert, speaker and timestamp. Quotes render from the chunk record, never retyped, so every claim sits next to its source.</dd></div>
         <div class="defrow"><dt>Against invention</dt><dd>Four habits: answers quote instead of generate, low scores get an explicit no-evidence reply, guide answers are pinned to single chunks, and disagreements stay side by side instead of being averaged away.</dd></div>
         <div class="defrow"><dt>From 3 to 30 calls</dt><dd>Same chunk schema. Trade the in-page index for embeddings plus a vector store, add timestamp alignment for raw audio, deduplicate near-identical turns, cache per-question answers, and score citation precision (share of quotes that are exact substrings) with per-question recall.</dd></div>
@@ -100,10 +114,11 @@
 </main>
 
 <footer class="docfoot">
-  Sources: the three sample transcripts and interview guide in the case pack. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
+  Sources: the three sample transcripts and interview guide in the case pack, or your own uploads. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
 </footer>
 <script src="data.js"></script>
 <script src="retrieval.js"></script>
+<script src="parse.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

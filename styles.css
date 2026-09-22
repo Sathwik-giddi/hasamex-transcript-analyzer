@@ -140,6 +140,42 @@ button.ghost:hover { border-color: var(--ink); }
 .empty { border: 1px dashed var(--muted); border-radius: 10px; padding: 22px; color: var(--muted); }
 .empty strong { color: var(--ink); }
 
+/* Evidence drawer: modal record of one claim plus its evidence.
+ * Reason: the drawer is where traceability becomes tangible in the demo. */
+.overlay {
+  position: fixed; inset: 0; background: rgba(31, 39, 51, 0.5);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 6vh 16px 16px; z-index: 50; overflow-y: auto;
+}
+.drawer {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  max-width: 640px; width: 100%; padding: 22px 24px;
+}
+.drawer .btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.btnrow .ghost, .btnrow .primary { min-height: 44px; }
+/* Verified badge: text label with a border, never color alone. */
+.verified {
+  display: inline-block; font: 700 12px/1.5 var(--sans);
+  color: var(--agree); border: 1px solid var(--agree);
+  border-radius: 4px; padding: 2px 9px; white-space: nowrap;
+}
+.verified.bad { color: var(--dis); border-color: var(--dis); }
+.score { font: 12px var(--mono); color: var(--muted); }
+/* Transcript jump: one-shot location cue, not a loop. */
+.flash { animation: flashcue 1.1s ease-out 2; border-radius: 10px; }
+@keyframes flashcue {
+  0%, 100% { background: var(--surface); }
+  50% { background: #efe6cf; }
+}
+.drawer details { margin-top: 12px; }
+.drawer summary { cursor: pointer; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; }
+.drawer pre {
+  font: 12px/1.5 var(--mono); background: var(--paper);
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+}
+
 footer.docfoot {
   max-width: 1060px; margin: 0 auto; padding: 0 24px 44px;
   color: var(--muted); font-size: 13px;

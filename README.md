@@ -28,12 +28,19 @@ question side by side, and questions plus the quote index search the new text.
 
 | Requirement | Where |
 |---|---|
-| Read the transcripts | Upload tab: `.txt` files parsed into timestamped chunks (1 speaker turn each, verbatim) |
+| Read the transcripts | Transcripts tab: `.txt` files parsed into timestamped chunks (1 speaker turn each, verbatim) |
 | Answer interview-guide questions per expert | Interview guide tab: 6 questions by each uploaded expert, closest passage shown with score |
-| Extract exact quotes | Every answer renders the verbatim chunk text; the quote index searches it |
+| Extract exact quotes | Every answer renders the verbatim chunk text; Evidence tab searches and browses it |
 | Show source timestamp | Every quote carries speaker, market and `[mm:ss]` |
-| Common themes and disagreements | Themes tab: each guide question answered side by side from every transcript |
-| Ask questions across transcripts | Question tab: free-text extractive QA over all chunks, optional per-expert filter |
+| Common themes and disagreements | Compare tab: each guide question answered side by side from every transcript |
+| Ask questions across transcripts | Explore tab: free-text extractive QA over all chunks, optional per-expert filter |
+
+## How answers stay trustworthy
+
+- **Evidence first.** Retrieval (TF-IDF plus stemming plus synonyms) selects passages; nothing is generated from model memory. The display order is always claim, evidence, source, timestamp.
+- **Claim-evidence validator.** Every displayed quote is checked as an exact substring of its cited turn at render time (`validateEvidence` in `retrieval.js`). Matches carry a "Verified: exact quote" badge; mismatches are flagged, never silently shown. Below-threshold retrieval gets an explicit no-evidence reply.
+- **Structured records.** Each answer is shaped as claim plus evidence JSON (question, market, expert, finding, quote, speaker, timestamp, source file, relevance, validation result). Open any Evidence record to inspect it, jump to its transcript position, or copy the JSON.
+- **Scoped numbers.** A standing note reminds readers that figures are individual expert expectations, scoped to each market, never blended into one forecast.
 
 ## Architecture
 
@@ -63,9 +70,12 @@ The UI is a clinical dossier: paper background, serif evidence quotes, mono time
 - `retrieval.js`: tokenizer, stemmer, TF-IDF plus cosine, synonym expansion
 - `app.js`: rendering plus tab logic
 
-## 2-minute demo script
+## 2-minute demo story
+
+Play a market researcher who just finished three expert interviews.
 
 1. **Upload moment.** Transcripts tab: drop the three `.txt` files. The report reads "Converted 3 files into 21 quoted passages." Click through to the guide.
-2. **Guide tab.** Open Q3 (budgets and ROI). France and Germany say economics decides, the UK balances it. Point at the three timestamps.
-3. **Themes tab.** Open the growth-pace reading: the one real disagreement, with all three numbers quoted (15 to 20 percent, single digits, above 15 percent).
-4. **Question tab.** Ask "Does finance alone decide the purchase?" The UK passage leads. Then type gibberish. The file refuses to guess, which is the anti-hallucination proof.
+2. **Guide matrix.** Open Q3 (budgets and ROI). France and Germany say economics decides, the UK balances it. Point at the three timestamps.
+3. **Evidence drawer.** Open the Germany answer as an Evidence record: finding, exact quote, Anna Keller 02:08, source file, verified badge, JSON. Press View in transcript and land on the passage, highlighted.
+4. **Compare.** The growth-pace question is the real disagreement, with all three numbers quoted and scoped (15 to 20 percent in stronger French centres, single digits across Germany, above 15 percent in some UK areas).
+5. **Explore.** Ask "Do all three experts agree that economics is the main purchasing driver?" The answer is no, with each side cited. Then type gibberish: the file refuses to guess.

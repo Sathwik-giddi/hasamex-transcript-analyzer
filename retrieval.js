@@ -123,3 +123,13 @@ function search(query, topK = 3, expertFilter = "all") {
 function expertOf(id) { return DB().experts.find(e => e.id === id); }
 function chunkById(id) { return DB().chunks.find(c => c.id === id); }
 function cite(c) { return `${expertOf(c.expert).name} [${c.ts}]`; }
+
+/* Claim-evidence validator: the transcript is the source of truth, so every
+ * displayed quote must be an exact substring of its cited chunk. Anything
+ * else is flagged, never silently shown. */
+function validateEvidence(chunkId, quote) {
+  const chunk = chunkById(chunkId);
+  if (!chunk || typeof quote !== "string") return { ok: false, reason: "missing chunk or quote" };
+  const exact = chunk.text.includes(quote.trim());
+  return { ok: exact, reason: exact ? "exact substring of cited turn" : "quote not found in cited turn" };
+}

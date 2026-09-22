@@ -18,9 +18,9 @@
 <nav class="indextabs" role="tablist" aria-label="Sections of the evidence file">
   <button class="tab active" role="tab" aria-selected="true" data-tab="files" id="tabbtn-files">Transcripts</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="guide" id="tabbtn-guide">Interview guide</button>
-  <button class="tab" role="tab" aria-selected="false" data-tab="themes" id="tabbtn-themes">Themes and disagreements</button>
-  <button class="tab" role="tab" aria-selected="false" data-tab="ask" id="tabbtn-ask">Question the file</button>
-  <button class="tab" role="tab" aria-selected="false" data-tab="quotes" id="tabbtn-quotes">Quote index</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="themes" id="tabbtn-themes">Compare</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="ask" id="tabbtn-ask">Explore</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="quotes" id="tabbtn-quotes">Evidence</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="arch" id="tabbtn-arch">How it works</button>
 </nav>
 
@@ -51,13 +51,17 @@
   </section>
 
   <section id="tab-themes" role="tabpanel" aria-labelledby="tabbtn-themes" hidden>
-    <h2 class="sec">Where they agree, and where they split</h2>
-    <p class="secsub">Readings drawn only from the quoted passages underneath. Verdict labels are text, not color alone.</p>
+    <h2 class="sec">Compare markets, side by side</h2>
+    <p class="secsub">Each guide question answered from every transcript at once. Agreement and disagreement stay visible instead of being averaged away.</p>
+    <div class="card">
+      <span class="exhibit-tag">Reading numbers</span>
+      <p class="secsub" style="margin:8px 0 0">Figures below are individual expert expectations, scoped to each speaker's market. They are not market forecasts, and the file never blends them into one number.</p>
+    </div>
     <div id="theme-list"></div>
   </section>
 
   <section id="tab-ask" role="tabpanel" aria-labelledby="tabbtn-ask" hidden>
-    <h2 class="sec">Question the file</h2>
+    <h2 class="sec">Explore the evidence</h2>
     <p class="secsub">Free text across all transcripts in the file. Answers are retrieved turns, quoted word for word. Scores below 0.06 read as no evidence, and the file refuses to guess.</p>
     <div class="card">
       <label class="field" for="expert-filter">Limit to</label>
@@ -84,9 +88,13 @@
   </section>
 
   <section id="tab-quotes" role="tabpanel" aria-labelledby="tabbtn-quotes" hidden>
-    <h2 class="sec">Quote index</h2>
-    <p class="secsub">Search the exact transcript language. Every hit is verbatim, with speaker and timestamp.</p>
+    <h2 class="sec">Evidence explorer</h2>
+    <p class="secsub">Search the exact transcript language, or open one transcript end to end. Every hit is verbatim, with speaker and timestamp.</p>
     <div class="card">
+      <label class="field" for="qs-expert">Browse transcript</label>
+      <select id="qs-expert">
+        <option value="all">All transcripts</option>
+      </select>
       <label class="field" for="qs">Search words</label>
       <div class="askrow">
         <input type="text" id="qs" placeholder="e.g. utilisation, capital cycle, theatre staff" />
@@ -105,7 +113,8 @@
         <div class="defrow"><dt>Pipeline</dt><dd><code>transcripts</code> become timestamped chunks (one speaker turn each), indexed as TF-IDF in this page. A question retrieves the closest turns by cosine similarity, and the answer is those turns, quoted exactly.</dd></div>
         <div class="defrow"><dt>Model choice</dt><dd>No generative model in the default path. At this scale, deterministic retrieval is more accurate, instant, offline and explainable. A language model may reword summaries later, but never supplies facts.</dd></div>
         <div class="defrow"><dt>Citations</dt><dd>Each chunk keeps its expert, speaker and timestamp. Quotes render from the chunk record, never retyped, so every claim sits next to its source.</dd></div>
-        <div class="defrow"><dt>Against invention</dt><dd>Four habits: answers quote instead of generate, low scores get an explicit no-evidence reply, guide answers are pinned to single chunks, and disagreements stay side by side instead of being averaged away.</dd></div>
+        <div class="defrow"><dt>Against invention</dt><dd>Four habits: answers quote instead of generate, low scores get an explicit no-evidence reply, every displayed quote is validated as an exact substring of its cited turn, and disagreements stay side by side instead of being averaged away.</dd></div>
+        <div class="defrow"><dt>Structured records</dt><dd>Each answer is shaped as claim plus evidence JSON (question, market, expert, quote, speaker, timestamp, source file, relevance, validation result). Open any Evidence record to inspect it or copy it.</dd></div>
         <div class="defrow"><dt>From 3 to 30 calls</dt><dd>Same chunk schema. Trade the in-page index for embeddings plus a vector store, add timestamp alignment for raw audio, deduplicate near-identical turns, cache per-question answers, and score citation precision (share of quotes that are exact substrings) with per-question recall.</dd></div>
       </dl>
     </div>
@@ -115,6 +124,7 @@
 <footer class="docfoot">
   Sources: your uploaded transcripts, plus the six-question interview guide from the case pack. Quotes are verbatim. Built for the Hasamex AI Engineer technical case.
 </footer>
+<div id="drawer-root"></div>
 <script src="data.js"></script>
 <script src="retrieval.js"></script>
 <script src="parse.js"></script>
